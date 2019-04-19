@@ -1,0 +1,1273 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n# Loan Status Predicition\n In this project, an analysis will be made of the different factors that make a loan granted to a client. And artificial intelligence algorithms will be implemented to predict whether the credit will be given or not. The data was taken from URL...  and is stored in the HDFS system.",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch1\u003eLoan Status Predicition\u003c/h1\u003e\n\u003cp\u003eIn this project, an analysis will be made of the different factors that make a loan granted to a client. And artificial intelligence algorithms will be implemented to predict whether the credit will be given or not. The data was taken from URL\u0026hellip;  and is stored in the HDFS system.\u003c/p\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068661_1992347821",
+      "id": "20190415-190839_2138436408",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Load Libraries\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eLoad Libraries\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068667_1991578324",
+      "id": "20190415-211201_1262767160",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nsqlContext \u003d sqlc\nfrom pyspark.sql import functions\nfrom pyspark.sql import Row\nfrom pyspark.sql import SparkSession\n\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "python"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068668_1989654579",
+      "id": "20190414-221859_272728532",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Create Spark session and load files\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eCreate Spark session and load files\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068668_1989654579",
+      "id": "20190415-211314_1931707475",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n# Import SparkSession\nsession\u003dSparkSession.builder.appName(\"Loans\").getOrCreate()\nsc\u003dsession.sparkContext\n\n# Load data from HDFS as RDD\nRDD_test\u003dsc.textFile(\"hdfs:///user/maria_dev/Loans/Test.csv\")\nRDD_train\u003dsc.textFile(\"hdfs:///user/maria_dev/Loans/Train.csv\")\n\n# Split lines \nRDD_test\u003dRDD_test.map(lambda line: line.split(\",\"))\nRDD_train\u003dRDD_train.map(lambda line: line.split(\",\"))\n\n# Filter the header from the data\nHeader\u003dRDD_train.first()                            \nRDD_train\u003dRDD_train.filter(lambda line:line !\u003dHeader)\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "python"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[u\u0027Loan_ID\u0027, u\u0027Gender\u0027, u\u0027Married\u0027, u\u0027Dependents\u0027, u\u0027Education\u0027, u\u0027Self_Employed\u0027, u\u0027ApplicantIncome\u0027, u\u0027CoapplicantIncome\u0027, u\u0027LoanAmount\u0027, u\u0027Loan_Amount_Term\u0027, u\u0027Credit_History\u0027, u\u0027Property_Area\u0027, u\u0027Loan_Status\u0027]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068668_1989654579",
+      "id": "20190414-221929_1341671689",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n# Map the RDD to  a DataFrame\n\nData_Train\u003dRDD_train.map(lambda line: Row(Loan_ID\u003dline[0],\n                                    Gender\u003dline[1],\n                                    Married\u003dline[2],\n                                    Dependents\u003dline[3],\n                                    Education\u003dline[4],\n                                    Self_Employed\u003dline[5],\n                                    ApplicantIncome\u003dline[6],\n                                    CoapplicantIncome\u003dline[7],\n                                    LoanAmount\u003dline[8],\n                                    Loan_Amount_Term\u003dline[9],\n                                    Credit_History\u003dline[10],\n                                    Property_Area\u003dline[11],\n                                    Loan_Status\u003dline[12])).toDF()\n                            \n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "python"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068668_1989654579",
+      "id": "20190415-004917_1932660823",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nData_Train.show()",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "python"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+---------------+-----------------+--------------+----------+------------+------+----------+----------------+--------+-----------+-------+-------------+-------------+\n|ApplicantIncome|CoapplicantIncome|Credit_History|Dependents|   Education|Gender|LoanAmount|Loan_Amount_Term| Loan_ID|Loan_Status|Married|Property_Area|Self_Employed|\n+---------------+-----------------+--------------+----------+------------+------+----------+----------------+--------+-----------+-------+-------------+-------------+\n|           5849|                0|             1|         0|    Graduate|  Male|          |             360|LP001002|          Y|     No|        Urban|           No|\n|           4583|             1508|             1|         1|    Graduate|  Male|       128|             360|LP001003|          N|    Yes|        Rural|           No|\n|           3000|                0|             1|         0|    Graduate|  Male|        66|             360|LP001005|          Y|    Yes|        Urban|          Yes|\n|           2583|             2358|             1|         0|Not Graduate|  Male|       120|             360|LP001006|          Y|    Yes|        Urban|           No|\n|           6000|                0|             1|         0|    Graduate|  Male|       141|             360|LP001008|          Y|     No|        Urban|           No|\n|           5417|             4196|             1|         2|    Graduate|  Male|       267|             360|LP001011|          Y|    Yes|        Urban|          Yes|\n|           2333|             1516|             1|         0|Not Graduate|  Male|        95|             360|LP001013|          Y|    Yes|        Urban|           No|\n|           3036|             2504|             0|        3+|    Graduate|  Male|       158|             360|LP001014|          N|    Yes|    Semiurban|           No|\n|           4006|             1526|             1|         2|    Graduate|  Male|       168|             360|LP001018|          Y|    Yes|        Urban|           No|\n|          12841|            10968|             1|         1|    Graduate|  Male|       349|             360|LP001020|          N|    Yes|    Semiurban|           No|\n|           3200|              700|             1|         2|    Graduate|  Male|        70|             360|LP001024|          Y|    Yes|        Urban|           No|\n|           2500|             1840|             1|         2|    Graduate|  Male|       109|             360|LP001027|          Y|    Yes|        Urban|             |\n|           3073|             8106|             1|         2|    Graduate|  Male|       200|             360|LP001028|          Y|    Yes|        Urban|           No|\n|           1853|             2840|             1|         0|    Graduate|  Male|       114|             360|LP001029|          N|     No|        Rural|           No|\n|           1299|             1086|             1|         2|    Graduate|  Male|        17|             120|LP001030|          Y|    Yes|        Urban|           No|\n|           4950|                0|             1|         0|    Graduate|  Male|       125|             360|LP001032|          Y|     No|        Urban|           No|\n|           3596|                0|              |         1|Not Graduate|  Male|       100|             240|LP001034|          Y|     No|        Urban|           No|\n|           3510|                0|             0|         0|    Graduate|Female|        76|             360|LP001036|          N|     No|        Urban|           No|\n|           4887|                0|             1|         0|Not Graduate|  Male|       133|             360|LP001038|          N|    Yes|        Rural|           No|\n|           2600|             3500|             1|         0|    Graduate|  Male|       115|                |LP001041|          Y|    Yes|        Urban|             |\n+---------------+-----------------+--------------+----------+------------+------+----------+----------------+--------+-----------+-------+-------------+-------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068668_1989654579",
+      "id": "20190415-005038_1597367753",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nData_Train.printSchema()",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "python"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- ApplicantIncome: string (nullable \u003d true)\n |-- CoapplicantIncome: string (nullable \u003d true)\n |-- Credit_History: string (nullable \u003d true)\n |-- Dependents: string (nullable \u003d true)\n |-- Education: string (nullable \u003d true)\n |-- Gender: string (nullable \u003d true)\n |-- LoanAmount: string (nullable \u003d true)\n |-- Loan_Amount_Term: string (nullable \u003d true)\n |-- Loan_ID: string (nullable \u003d true)\n |-- Loan_Status: string (nullable \u003d true)\n |-- Married: string (nullable \u003d true)\n |-- Property_Area: string (nullable \u003d true)\n |-- Self_Employed: string (nullable \u003d true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068669_1989269830",
+      "id": "20190415-005602_1740062532",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n# All features are strings. We have to change them to a proper format\n\nfrom pyspark.sql.types import *\n\nData_Train\u003dData_Train.withColumn(\"ApplicantIncome\", Data_Train[\"ApplicantIncome\"].cast(FloatType())) \\\n   .withColumn(\"CoapplicantIncome\", Data_Train[\"CoapplicantIncome\"].cast(FloatType())) \\\n   .withColumn(\"Credit_History\",Data_Train[\"Credit_History\"].cast(FloatType())) \\\n   .withColumn(\"LoanAmount\", Data_Train[\"LoanAmount\"].cast(FloatType())) \\\n   .withColumn(\"Loan_Amount_Term\", Data_Train[\"Loan_Amount_Term\"].cast(FloatType()))  \n\n\n\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "lineNumbers": true,
+        "tableHide": false,
+        "editorSetting": {
+          "language": "python"
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068669_1989269830",
+      "id": "20190415-010300_1399303927",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nsqlContext \u003d sqlc\nData_Train.registerTempTable(\"Data\")",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "python"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068669_1989269830",
+      "id": "20190415-154033_1562187165",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nFROM Data LIMIT 10\n\n\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "ApplicantIncome\tCoapplicantIncome\tCredit_History\tDependents\tEducation\tGender\tLoanAmount\tLoan_Amount_Term\tLoan_ID\tLoan_Status\tMarried\tProperty_Area\tSelf_Employed\n5849\t0\t1\t0\tGraduate\tMale\t\t360\tLP001002\tY\tNo\tUrban\tNo\n4583\t1508\t1\t1\tGraduate\tMale\t128\t360\tLP001003\tN\tYes\tRural\tNo\n3000\t0\t1\t0\tGraduate\tMale\t66\t360\tLP001005\tY\tYes\tUrban\tYes\n2583\t2358\t1\t0\tNot Graduate\tMale\t120\t360\tLP001006\tY\tYes\tUrban\tNo\n6000\t0\t1\t0\tGraduate\tMale\t141\t360\tLP001008\tY\tNo\tUrban\tNo\n5417\t4196\t1\t2\tGraduate\tMale\t267\t360\tLP001011\tY\tYes\tUrban\tYes\n2333\t1516\t1\t0\tNot Graduate\tMale\t95\t360\tLP001013\tY\tYes\tUrban\tNo\n3036\t2504\t0\t3+\tGraduate\tMale\t158\t360\tLP001014\tN\tYes\tSemiurban\tNo\n4006\t1526\t1\t2\tGraduate\tMale\t168\t360\tLP001018\tY\tYes\tUrban\tNo\n12841\t10968\t1\t1\tGraduate\tMale\t349\t360\tLP001020\tN\tYes\tSemiurban\tNo\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068669_1989269830",
+      "id": "20190415-011401_1039340118",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n# Data Exploration\nIn this part, we\u0027re going to visualize and explorate different features of the data.",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch1\u003eData Exploration\u003c/h1\u003e\n\u003cp\u003eIn this part, we\u0027re going to visualize and explorate different features of the data.\u003c/p\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068670_1990424077",
+      "id": "20190415-194157_232180893",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Loan status for each gender",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eLoan status for each gender\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068671_1990039328",
+      "id": "20190416-002136_756674707",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nSELECT Gender,Loan_Status, COUNT(*) as count FROM Data GROUP BY Gender, Loan_Status\n ",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "multiBarChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Gender",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "Loan_Status",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "count",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true,
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Gender\tLoan_Status\tcount\n\tN\t5\nFemale\tN\t37\nMale\tY\t339\nMale\tN\t150\n\tY\t8\nFemale\tY\t75\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068671_1990039328",
+      "id": "20190415-012619_1079939567",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nIs possible to see that men ask more for loans than women. There are nulls values inside the dataset that have to be remove or replace before making the  machine learning analysis\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cp\u003eIs possible to see that men ask more for loans than women. There are nulls values inside the dataset that have to be remove or replace before making the  machine learning analysis\u003c/p\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068671_1990039328",
+      "id": "20190415-211823_1688468493",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n###Loan status by Marital status",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "editorSetting": {
+          "language": "scala"
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eLoan status by Marital status\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068672_1975803619",
+      "id": "20190416-002308_1323078101",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nSELECT Married,Loan_Status, COUNT(*) as count FROM Data GROUP BY Married,Loan_Status",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "multiBarChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Married",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "Loan_Status",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "count",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true,
+        "editorSetting": {
+          "language": "sql"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Married\tLoan_Status\tcount\nYes\tY\t285\nNo\tY\t134\nYes\tN\t113\nNo\tN\t79\n\tY\t3\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068672_1975803619",
+      "id": "20190415-184352_604985083",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nMarried people ask more for loans, and is also a better target, they tend to be more accepted than single people\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cp\u003eMarried people ask more for loans, and is also a better target, they tend to be more accepted than single people\u003c/p\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068672_1975803619",
+      "id": "20190415-214335_322062883",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Loan status by Education",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "editorSetting": {
+          "language": "scala"
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eLoan status by Education\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068672_1975803619",
+      "id": "20190416-002419_851986585",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nSELECT Education,Loan_Status, COUNT(*) as count FROM Data GROUP BY Education, Loan_Status\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "multiBarChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Education",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "Loan_Status",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "count",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true,
+        "editorSetting": {
+          "language": "sql"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Education\tLoan_Status\tcount\nNot Graduate\tN\t52\nGraduate\tN\t140\nGraduate\tY\t340\nNot Graduate\tY\t82\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068673_1975418870",
+      "id": "20190415-190700_485556694",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nGraduated people ask more for loans, and is also a better target, they tend to be more accepted than not graduated people\n\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cp\u003eGraduated people ask more for loans, and is also a better target, they tend to be more accepted than not graduated people\u003c/p\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068673_1975418870",
+      "id": "20190415-214531_1412519859",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nSELECT Property_Area,Loan_Status, COUNT(*) as count FROM Data GROUP BY Property_Area, Loan_Status\n\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "multiBarChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Property_Area",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "Loan_Status",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "count",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true,
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Property_Area\tLoan_Status\tcount\nRural\tY\t110\nUrban\tN\t69\nSemiurban\tY\t179\nUrban\tY\t133\nRural\tN\t69\nSemiurban\tN\t54\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068673_1975418870",
+      "id": "20190415-235547_1717581350",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nApparently the area in which you own the property does not greatly influence the loan status, but there is a high number of the people who own semiurban properties, that the loan was granted. \n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cp\u003eApparently the area in which you own the property does not greatly influence the loan status, but there is a high number of the people who own semiurban properties, that the loan was granted.\u003c/p\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068674_1976573116",
+      "id": "20190416-000148_1473446090",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nSELECT Self_Employed,Loan_Status, COUNT(*) as count FROM Data GROUP BY Self_Employed, Loan_Status",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "multiBarChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Self_Employed",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "Loan_Status",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "count",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true,
+        "editorSetting": {
+          "language": "sql"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Self_Employed\tLoan_Status\tcount\n\tN\t9\nYes\tY\t56\nNo\tY\t343\nYes\tN\t26\nNo\tN\t157\n\tY\t23\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068674_1976573116",
+      "id": "20190416-004215_867129976",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\nSelf employed people is less prone to ask for loans.\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cp\u003eSelf employed people is less prone to ask for loans.\u003c/p\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068674_1976573116",
+      "id": "20190416-004504_677746512",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Applicant Income+Coapplicant Income vs Loan Amount, classified by Loan Status",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "editorSetting": {
+          "language": "scala"
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eApplicant Income+Coapplicant Income vs Loan Amount, classified by Loan Status\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068675_1976188368",
+      "id": "20190416-001003_385035053",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nSELECT LoanAmount,Loan_Status,ApplicantIncome+CoapplicantIncome FROM Data",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "scatterChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "scatterChart": {
+                  "group": {
+                    "name": "Loan_Status",
+                    "index": 1.0,
+                    "aggr": "sum"
+                  },
+                  "xAxis": {
+                    "name": "(CAST(ApplicantIncome AS DOUBLE) + CAST(CoapplicantIncome AS DOUBLE))",
+                    "index": 2.0,
+                    "aggr": "sum"
+                  },
+                  "yAxis": {
+                    "name": "LoanAmount",
+                    "index": 0.0,
+                    "aggr": "sum"
+                  }
+                }
+              }
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true,
+        "editorSetting": {
+          "language": "sql"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "LoanAmount\tLoan_Status\t(CAST(ApplicantIncome AS DOUBLE) + CAST(CoapplicantIncome AS DOUBLE))\n\tY\t5849.0\n128\tN\t6091.0\n66\tY\t3000.0\n120\tY\t4941.0\n141\tY\t6000.0\n267\tY\t9613.0\n95\tY\t3849.0\n158\tN\t5540.0\n168\tY\t5532.0\n349\tN\t23809.0\n70\tY\t3900.0\n109\tY\t4340.0\n200\tY\t11179.0\n114\tN\t4693.0\n17\tY\t2385.0\n125\tY\t4950.0\n100\tY\t3596.0\n76\tN\t3510.0\n133\tN\t4887.0\n115\tY\t6100.0\n104\tN\t7660.0\n315\tY\t11580.0\n116\tN\t4511.0\n112\tN\t5282.0\n151\tN\t6642.0\n191\tY\t9560.0\n122\tY\t5052.0\n110\tY\t5266.0\n35\tN\t1442.0\n120\tY\t5833.0\n201\tN\t7535.0\n74\tN\t3167.0\n106\tN\t4692.0\n114\tY\t5167.0\n320\tN\t15500.0\n\tY\t4342.0\n100\tN\t3158.0\n144\tY\t5126.0\n184\tY\t11376.0\n110\tY\t5416.0\n80\tN\t3600.0\n47\tY\t3013.0\n75\tY\t2400.0\n134\tY\t6277.0\n96\tY\t4695.0\n88\tY\t3410.0\n44\tY\t5649.0\n144\tY\t5821.0\n120\tN\t6085.0\n144\tY\t6275.0\n100\tY\t3572.0\n120\tY\t3086.0\n112\tN\t4230.0\n134\tN\t4616.0\n286\tN\t11500.0\n97\tY\t3875.0\n96\tY\t3723.0\n135\tN\t5566.0\n180\tY\t10330.0\n144\tY\t6216.0\n120\tY\t6296.0\n99\tY\t3029.0\n165\tN\t6058.0\n\tN\t4945.0\n116\tN\t4166.0\n258\tN\t10321.0\n126\tN\t5454.0\n312\tY\t10750.0\n125\tY\t7100.0\n136\tN\t4300.0\n172\tY\t6274.0\n97\tY\t3750.0\n81\tY\t3500.0\n95\tN\t4755.0\n187\tY\t7040.0\n113\tN\t3750.0\n176\tN\t8500.0\n110\tN\t4022.0\n180\tN\t7167.0\n130\tY\t5499.0\n111\tY\t3846.0\n\tY\t2395.0\n167\tN\t3259.0\n265\tN\t8250.0\n50\tY\t3988.0\n136\tY\t4897.0\n99\tY\t5333.0\n104\tY\t4618.0\n210\tY\t8566.0\n175\tY\t9862.0\n131\tY\t5858.0\n188\tY\t11904.0\n81\tY\t5093.0\n122\tY\t4133.0\n25\tY\t3620.0\n\tN\t6782.0\n137\tY\t4786.0\n50\tY\t2974.0\n115\tY\t4188.0\n131\tY\t5300.0\n133\tY\t7551.0\n151\tY\t8649.0\n\tY\t13650.0\n\tY\t8235.0\n160\tY\t4570.0\n100\tY\t4082.0\n225\tY\t12543.0\n120\tN\t7333.0\n216\tN\t7400.0\n94\tY\t2825.0\n136\tY\t5316.0\n139\tY\t5262.0\n152\tN\t7686.0\n\tY\t7451.0\n118\tY\t5050.0\n185\tY\t14583.0\n154\tY\t5450.0\n85\tY\t3612.0\n175\tN\t7710.0\n259\tY\t10408.0\n180\tY\t8334.0\n44\tY\t4166.0\n137\tY\t11117.0\n81\tY\t2957.0\n194\tY\t6314.0\n93\tY\t3692.0\n370\tY\t23803.0\n\tY\t5505.0\n160\tN\t14363.0\n182\tN\t8649.0\n650\tY\t20166.0\n74\tY\t3943.0\n70\tY\t2718.0\n25\tY\t3459.0\n102\tY\t4895.0\n290\tN\t11750.0\n84\tN\t4583.0\n88\tY\t6816.0\n242\tN\t14999.0\n129\tN\t5630.0\n185\tN\t7125.0\n168\tY\t5417.0\n175\tY\t6950.0\n122\tY\t4732.0\n187\tY\t11757.0\n100\tY\t6816.0\n70\tY\t14866.0\n30\tY\t2963.0\n225\tN\t11666.0\n125\tY\t5690.0\n118\tN\t6277.0\n152\tY\t6327.0\n244\tN\t9166.0\n113\tN\t2281.0\n50\tY\t3254.0\n600\tY\t39999.0\n160\tY\t6000.0\n187\tY\t9538.0\n120\tY\t5063.0\n255\tY\t10208.0\n98\tY\t2904.0\n275\tN\t7933.0\n121\tN\t4369.0\n158\tY\t5614.0\n75\tY\t9323.0\n182\tY\t6873.0\n112\tN\t4583.0\n129\tY\t5772.0\n63\tN\t2237.0\n200\tY\t8000.0\n95\tY\t3589.0\n700\tY\t51763.0\n81\tN\t3522.0\n187\tY\t11333.0\n87\tN\t5080.0\n116\tY\t5461.0\n101\tY\t3664.0\n495\tN\t16816.0\n116\tY\t3750.0\n102\tN\t3784.0\n180\tN\t13650.0\n67\tN\t6979.0\n73\tY\t4600.0\n260\tN\t33846.0\n108\tY\t3625.0\n120\tY\t43897.0\n66\tN\t2178.0\n58\tY\t4521.0\n168\tY\t5970.0\n188\tY\t9328.0\n48\tY\t4885.0\n164\tN\t12000.0\n160\tN\t6033.0\n76\tY\t3858.0\n120\tY\t4191.0\n170\tN\t5708.0\n187\tY\t12083.0\n120\tY\t4272.0\n113\tY\t6232.0\n83\tN\t11000.0\n90\tY\t5100.0\n166\tY\t4923.0\n\tN\t3992.0\n135\tY\t4583.0\n124\tY\t3917.0\n120\tY\t4408.0\n80\tY\t3244.0\n55\tY\t6506.0\n59\tY\t2479.0\n127\tN\t3418.0\n214\tN\t10000.0\n128\tN\t4680.0\n240\tY\t7787.0\n130\tY\t5703.0\n137\tY\t6194.0\n100\tY\t4833.0\n135\tN\t1950.0\n131\tY\t5502.0\n72\tN\t5000.0\n127\tY\t6666.0\n60\tN\t2221.0\n116\tY\t5726.0\n144\tY\t5762.0\n175\tY\t8588.0\n128\tY\t6250.0\n170\tN\t3250.0\n138\tN\t4735.0\n210\tY\t7945.0\n158\tY\t4758.0\n200\tY\t6400.0\n104\tY\t4545.0\n42\tY\t3716.0\n120\tY\t5787.0\n280\tY\t8333.0\n140\tY\t4934.0\n170\tY\t6760.0\n255\tN\t5746.0\n122\tY\t3463.0\n112\tY\t3812.0\n96\tY\t3315.0\n120\tY\t10819.0\n140\tN\t4493.0\n155\tY\t8666.0\n108\tY\t7550.0\n123\tY\t7823.0\n120\tN\t10383.0\n112\tY\t9703.0\n137\tY\t6608.0\n123\tY\t4725.0\n90\tY\t3677.0\n201\tN\t5558.0\n138\tN\t3427.0\n104\tY\t4750.0\n279\tY\t9762.0\n192\tN\t16250.0\n255\tY\t3083.0\n115\tN\t6045.0\n94\tN\t5250.0\n304\tN\t16783.0\n128\tN\t4931.0\n330\tY\t10333.0\n134\tY\t4269.0\n155\tN\t3481.0\n120\tY\t7200.0\n128\tY\t5166.0\n151\tY\t7542.0\n150\tY\t6095.0\n160\tY\t6144.0\n135\tN\t3418.0\n90\tY\t4436.0\n30\tY\t3237.0\n136\tY\t11146.0\n126\tY\t4690.0\n150\tY\t4843.0\n90\tY\t3900.0\n115\tY\t4592.0\n207\tY\t7267.0\n80\tY\t4403.0\n436\tY\t14583.0\n124\tY\t4100.0\n158\tN\t6479.0\n112\tY\t4727.0\n78\tY\t3286.7999878\n54\tY\t3477.0\n\tN\t20667.0\n89\tY\t6211.0\n99\tN\t4317.0\n120\tY\t5704.0\n115\tY\t4124.0\n187\tY\t9508.0\n139\tY\t5491.0\n127\tN\t4400.0\n134\tY\t4713.0\n143\tN\t5417.0\n172\tY\t5717.0\n110\tY\t5666.0\n200\tY\t6875.0\n135\tY\t4666.0\n151\tN\t7541.0\n113\tN\t4939.0\n93\tN\t4734.0\n105\tY\t4625.0\n132\tY\t5000.0\n96\tY\t3428.0\n140\tY\t6500.0\n\tN\t2000.0\n135\tY\t5428.0\n104\tN\t4263.0\n480\tN\t20233.0\n185\tY\t7667.0\n84\tY\t2917.0\n111\tY\t5332.0\n56\tY\t2507.0\n144\tY\t5746.0\n159\tN\t4316.0\n111\tY\t5039.0\n120\tY\t3717.0\n88\tY\t4192.0\n112\tY\t3541.0\n155\tN\t10000.0\n115\tY\t4567.0\n124\tY\t4531.0\n\tY\t5191.0\n132\tY\t6151.0\n300\tY\t15000.0\n376\tN\t13649.0\n130\tY\t4917.0\n184\tY\t7978.0\n110\tN\t6784.0\n67\tY\t2500.0\n117\tY\t6177.0\n98\tY\t2935.0\n71\tY\t2833.0\n490\tY\t63337.0\n182\tY\t11666.0\n70\tY\t9993.0\n160\tY\t5938.0\n176\tY\t7100.0\n\tN\t1830.0\n71\tY\t4160.0\n173\tN\t4234.0\n46\tN\t2378.0\n158\tY\t5783.0\n74\tY\t3173.0\n125\tY\t4913.0\n160\tY\t4957.0\n152\tN\t6753.0\n126\tY\t5251.0\n259\tY\t10916.0\n187\tY\t8875.0\n228\tY\t9083.0\n308\tN\t12917.0\n95\tY\t4749.0\n105\tN\t5500.0\n130\tY\t2928.0\n116\tY\t3813.0\n165\tY\t11500.0\n67\tN\t3875.0\n100\tN\t4666.0\n200\tY\t8334.0\n81\tN\t4723.0\n236\tY\t8667.0\n130\tY\t7083.0\n95\tY\t6046.0\n141\tY\t6822.0\n133\tN\t6216.0\n96\tN\t2500.0\n124\tN\t5124.0\n175\tY\t6325.0\n570\tN\t24996.0\n55\tY\t15759.0\n155\tY\t5185.0\n380\tY\t17196.0\n111\tN\t5049.0\n110\tY\t4223.0\n120\tY\t5740.0\n130\tY\t13746.0\n130\tY\t4310.0\n71\tN\t3069.0\n130\tY\t5391.0\n128\tY\t5833.0\n296\tY\t10173.0\n156\tY\t6000.0\n128\tY\t7167.0\n100\tN\t4566.0\n113\tY\t3667.0\n132\tY\t3946.0\n\tN\t6146.0\n136\tY\t4750.0\n125\tY\t5488.0\n185\tY\t9167.0\n275\tY\t9504.0\n120\tY\t4698.0\n113\tY\t3618.0\n113\tY\t4500.0\n135\tY\t3760.0\n71\tN\t3180.0\n95\tY\t4492.0\n109\tY\t5568.0\n103\tN\t3300.0\n45\tN\t2889.0\n65\tN\t2755.0\n103\tY\t22500.0\n53\tY\t1963.0\n194\tN\t7441.0\n115\tY\t4547.0\n115\tY\t4567.0\n66\tY\t2213.0\n152\tN\t8300.0\n360\tN\t81000.0\n62\tN\t3867.0\n160\tY\t6256.0\n218\tN\t6096.0\n110\tY\t4286.0\n178\tN\t5386.0\n60\tY\t2995.0\n160\tN\t2600.0\n239\tN\t21600.0\n112\tY\t3798.0\n138\tY\t4663.0\n138\tY\t5829.0\n80\tN\t2720.0\n100\tY\t3539.0\n110\tN\t8917.0\n96\tY\t14880.0\n121\tY\t6966.0\n81\tN\t4606.0\n133\tY\t5935.0\n87\tY\t2936.12000084\n60\tY\t2717.0\n150\tY\t8624.0\n105\tN\t6500.0\n405\tY\t12876.0\n143\tY\t4765.0\n100\tY\t3750.0\n\tY\t10047.0\n50\tY\t3777.0\n\tY\t3338.0\n187\tN\t10416.0\n138\tY\t7142.0\n187\tY\t8724.0\n180\tY\t9734.0\n148\tY\t6700.0\n152\tY\t37719.0\n175\tY\t15666.0\n130\tY\t4676.0\n110\tY\t4652.0\n55\tN\t4915.0\n150\tN\t5050.0\n190\tN\t4311.0\n125\tN\t3564.0\n60\tY\t3414.0\n149\tN\t5681.0\n90\tY\t4949.0\n84\tY\t7085.0\n96\tY\t3859.0\n118\tY\t4301.0\n173\tN\t6277.0\n136\tY\t4354.0\n160\tN\t8334.0\n160\tY\t6166.0\n128\tY\t7740.0\n153\tY\t5203.0\n132\tY\t5191.0\n98\tN\t4166.0\n140\tY\t6000.0\n70\tN\t4611.0\n110\tY\t16692.0\n98\tY\t3127.0\n110\tN\t6784.0\n162\tY\t5529.0\n113\tN\t4153.0\n100\tY\t4691.0\n93\tY\t2500.0\n162\tY\t10180.0\n150\tY\t17539.0\n230\tY\t8450.0\n132\tN\t4745.0\n86\tY\t18917.0\n\tN\t4550.0\n154\tY\t4350.0\n113\tY\t3095.0\n128\tY\t5233.0\n234\tY\t10833.0\n246\tY\t8333.0\n131\tY\t4394.0\n80\tN\t3547.0\n500\tN\t18333.0\n160\tY\t6666.0\n75\tN\t2435.0\n96\tY\t5484.0\n186\tY\t6464.0\n110\tY\t3691.0\n225\tY\t17263.0\n119\tN\t5754.0\n105\tY\t4239.0\n107\tY\t4300.0\n111\tY\t7482.0\n95\tY\t2895.0\n209\tN\t10699.0\n113\tY\t4328.0\n100\tY\t3159.0\n208\tY\t10489.0\n138\tN\t9352.0\n124\tY\t5297.0\n243\tY\t7926.0\n480\tY\t27500.0\n96\tN\t3583.0\n188\tY\t5492.0\n40\tY\t13262.0\n100\tN\t4885.0\n250\tY\t8069.0\n148\tY\t5318.0\n70\tN\t8796.0\n311\tN\t9481.0\n150\tY\t6894.0\n113\tY\t3663.0\n123\tN\t4874.0\n185\tN\t6598.0\n95\tN\t3400.0\n45\tY\t3934.0\n55\tY\t2500.0\n100\tY\t7101.0\n480\tY\t15114.0\n\tN\t6767.0\n400\tY\t17500.0\n110\tY\t3775.0\n161\tY\t6715.0\n94\tY\t3981.0\n130\tY\t6783.0\n216\tY\t6525.0\n100\tY\t4281.0\n110\tN\t3588.0\n196\tN\t11250.0\n125\tY\t18165.0\n126\tY\t4592.0\n324\tY\t10039.0\n107\tY\t3617.0\n66\tN\t3453.0\n157\tY\t6417.0\n140\tY\t7453.0\n99\tN\t2138.0\n95\tY\t3652.0\n128\tY\t4763.0\n102\tY\t3680.0\n155\tY\t4718.0\n80\tN\t3358.0\n145\tY\t4309.0\n103\tN\t5000.0\n110\tY\t4801.0\n\tN\t6633.0\n\tY\t4867.0\n158\tY\t6583.0\n181\tN\t4787.0\n132\tN\t7859.0\n26\tY\t6500.0\n84\tY\t4292.0\n260\tY\t10139.0\n162\tY\t6556.0\n182\tY\t6486.0\n108\tY\t3917.0\n600\tY\t19484.0\n211\tY\t7977.0\n132\tY\t5800.0\n258\tN\t8799.0\n120\tY\t4467.0\n70\tY\t3333.0\n123\tN\t5900.0\n9\tN\t2378.0\n104\tN\t5230.0\n186\tY\t5167.0\n165\tN\t6567.0\n275\tY\t16666.0\n187\tN\t7750.0\n150\tN\t6406.0\n108\tY\t3620.0\n136\tN\t5297.0\n110\tY\t5968.0\n107\tY\t4014.0\n161\tY\t6099.0\n205\tY\t6540.0\n90\tN\t35673.0\n36\tY\t3166.0\n61\tN\t1880.0\n146\tN\t4704.0\n172\tN\t7283.0\n104\tY\t3819.0\n70\tY\t2165.0\n94\tY\t4750.0\n106\tN\t2726.0\n56\tY\t6416.0\n205\tN\t6000.0\n292\tY\t9357.0\n142\tY\t7159.0\n260\tY\t16120.0\n110\tY\t3833.0\n187\tN\t7383.0\n88\tN\t2987.0\n180\tY\t9963.0\n192\tY\t5780.0\n350\tN\t42083.0\n155\tY\t5686.0\n128\tY\t5703.0\n172\tY\t7977.0\n496\tY\t12000.0\n\tN\t6200.0\n173\tY\t5900.0\n157\tY\t5398.0\n108\tY\t5182.0\n71\tY\t2900.0\n40\tY\t4106.0\n253\tY\t8312.0\n187\tY\t7583.0\n133\tN\t4583.0\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068675_1976188368",
+      "id": "20190416-000705_1508657172",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md \nIs obvius that there is no direct relation between the amount of income and loan status. Despite of having high income there are cases where the loan was rejected. What this tell us is, that the others variables are also a decisive factor.\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cp\u003eIs obvius that there is no direct relation between the amount of income and loan status. Despite of having high income there are cases where the loan was rejected. What this tell us is, that the others variables are also a decisive factor.\u003c/p\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068676_1974264623",
+      "id": "20190416-001001_1444801963",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%md\n### Correlation matrix",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true,
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eCorrelation matrix\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068677_1973879874",
+      "id": "20190416-003058_1984431801",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\nimport numpy\nfrom pyspark.mllib.stat import Statistics\n",
+      "dateUpdated": "Apr 19, 2019 12:01:08 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068677_1973879874",
+      "id": "20190416-020635_141328400",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh \n    cd /usr/hdp/current/zeppelin-server/Loan-status-prediction\n    git push origin {branch-name}",
+      "user": "anonymous",
+      "dateUpdated": "Apr 19, 2019 12:05:46 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sh",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "sh",
+          "editOnDblClick": false
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Permission denied (publickey).\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "ExitValue: 128"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632068678_1975034121",
+      "id": "20190416-020731_170189453",
+      "dateCreated": "Apr 19, 2019 12:01:08 AM",
+      "dateStarted": "Apr 19, 2019 12:05:46 AM",
+      "dateFinished": "Apr 19, 2019 12:05:47 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh\n",
+      "user": "anonymous",
+      "dateUpdated": "Apr 19, 2019 12:05:14 AM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1555632314289_696081160",
+      "id": "20190419-000514_1278691518",
+      "dateCreated": "Apr 19, 2019 12:05:14 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "loans2",
+  "id": "2EAF8SXJD",
+  "angularObjects": {
+    "2CHS8UYQQ:shared_process": [],
+    "2C8A4SZ9T_livy2:shared_process": [],
+    "2CK8A9MEG:shared_process": [],
+    "2C4U48MY3_spark2:shared_process": [],
+    "2CKAY1A8Y:shared_process": [],
+    "2CKEKWY8Z:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
